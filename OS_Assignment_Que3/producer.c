@@ -1,6 +1,6 @@
 #include "problem.h"
 
-void producer()
+void producer(int w)
 {
 	int i=0,n;
 	MEM *S = memory();
@@ -12,7 +12,7 @@ void producer()
 		sem_wait(&S->mutex);
 		sem_getvalue(&S->full,&n);
 		(S->buff)[n] = i; // Place value to BUFFER
-		printf("[PRODUCER] Placed item [%d]\n", i);
+		printf("[PRODUCER %d ] Placed item [%d]\n",w, i);
 		sem_post(&S->mutex);
 		sem_post(&S->full); // Semaphore up operation
 		sleep(PRODUCER_SLEEP_SEC);
@@ -20,9 +20,9 @@ void producer()
 	}
 }
 
-int main()
+int main(int argc,char *argv[])
 {
 	init();
-	producer();
+	producer(argv[1][0]-'0');
 	return 0;
 }
